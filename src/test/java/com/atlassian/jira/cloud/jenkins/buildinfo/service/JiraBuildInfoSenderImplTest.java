@@ -12,6 +12,7 @@ import com.atlassian.jira.cloud.jenkins.common.response.JiraSendInfoResponse;
 import com.atlassian.jira.cloud.jenkins.common.service.IssueKeyExtractor;
 import com.atlassian.jira.cloud.jenkins.config.JiraCloudSiteConfig;
 import com.atlassian.jira.cloud.jenkins.tenantinfo.CloudIdResolver;
+import com.atlassian.jira.cloud.jenkins.util.FreestyleBranchNameIssueKeyExtractor;
 import com.atlassian.jira.cloud.jenkins.util.RunWrapperProvider;
 import com.atlassian.jira.cloud.jenkins.util.SecretRetriever;
 import com.google.common.collect.ImmutableList;
@@ -69,6 +70,8 @@ public class JiraBuildInfoSenderImplTest {
 
     private JiraBuildInfoSender classUnderTest;
 
+    @Mock private FreestyleBranchNameIssueKeyExtractor freestyleBranchNameIssueKeyExtractor;
+
     @Before
     public void setUp() {
         classUnderTest =
@@ -79,7 +82,8 @@ public class JiraBuildInfoSenderImplTest {
                         cloudIdResolver,
                         accessTokenRetriever,
                         buildsApi,
-                        runWrapperProvider);
+                        runWrapperProvider,
+                        freestyleBranchNameIssueKeyExtractor);
 
         setupMocks();
     }

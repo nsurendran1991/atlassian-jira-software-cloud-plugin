@@ -17,6 +17,7 @@ import com.atlassian.jira.cloud.jenkins.provider.ObjectMapperProvider;
 import com.atlassian.jira.cloud.jenkins.tenantinfo.CloudIdResolver;
 import com.atlassian.jira.cloud.jenkins.util.RunWrapperProviderImpl;
 import com.atlassian.jira.cloud.jenkins.util.BranchNameIssueKeyExtractor;
+import com.atlassian.jira.cloud.jenkins.util.FreestyleBranchNameIssueKeyExtractor;
 import com.atlassian.jira.cloud.jenkins.util.SecretRetriever;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
@@ -39,7 +40,10 @@ public final class JiraSenderFactory {
         final ObjectMapper objectMapper = objectMapperProvider.objectMapper();
 
         final JiraSiteConfigRetriever siteConfigRetriever = new JiraSiteConfigRetrieverImpl();
-        final BranchNameIssueKeyExtractor branchNameIssueKeyExtractor = new BranchNameIssueKeyExtractor();
+        final BranchNameIssueKeyExtractor branchNameIssueKeyExtractor =
+                new BranchNameIssueKeyExtractor();
+        final FreestyleBranchNameIssueKeyExtractor freestyleBranchNameIssueKeyExtractor =
+                new FreestyleBranchNameIssueKeyExtractor();
         final IssueKeyExtractor changeLogIssueKeyExtractor = new ChangeLogIssueKeyExtractor();
         final SecretRetriever secretRetriever = new SecretRetriever();
         final CloudIdResolver cloudIdResolver = new CloudIdResolver(httpClient, objectMapper);
@@ -76,7 +80,8 @@ public final class JiraSenderFactory {
                         cloudIdResolver,
                         accessTokenRetriever,
                         buildsApi,
-                        new RunWrapperProviderImpl());
+                        new RunWrapperProviderImpl(),
+                        freestyleBranchNameIssueKeyExtractor);
 
         this.jiraDeploymentInfoSender =
                 new JiraDeploymentInfoSenderImpl(
